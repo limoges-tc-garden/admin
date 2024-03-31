@@ -2,6 +2,15 @@
 
 > Ensemble de règles pour les futurs contributeurs.
 
+## Mettre à jour [les types de la base PostgreSQL](./src/utils/database.types.ts)
+
+Il faut avoir le [CLI Supabase](https://github.com/supabase/cli) installé, [connecté](https://supabase.com/docs/reference/cli/supabase-login) et [lié au projet](https://supabase.com/docs/reference/cli/supabase-link) avant d'effectuer cette opération.
+
+```bash
+# Voir <https://supabase.com/docs/reference/cli/supabase-gen-types-typescript>.
+supabase gen types typescript --project-id abcdefghijklmnopqrst > ./src/utils/database.types.ts
+```
+
 ## Langue
 
 On utilise de l'anglais et du français dans le projet, ainsi il faut savoir quand utiliser l'une ou l'autre langue.
