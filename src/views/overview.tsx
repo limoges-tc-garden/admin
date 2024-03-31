@@ -7,7 +7,10 @@ export default function OverviewView () {
   return (
     <ShowWhenAuthenticated>
       <h1>Vue d'ensemble</h1>
-      <p>Vous êtes authentifié !</p>
+
+      <a href="/articles">Voir les articles</a>
+      <a href="/tournois">Voir les tournois</a>
+      <a href="/partenaires">Voir les partenaires</a>
     </ShowWhenAuthenticated>
   )
 };
