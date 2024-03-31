@@ -2,10 +2,29 @@ import ShowWhenAuthenticated from "~/components/ShowWhenAuthenticated";
 import { Navigate, useParams } from "@solidjs/router";
 import { Show, createResource } from "solid-js";
 import supabase from "~/utils/supabase";
+import { createFileUploadToSupabase } from "~/utils/create-file-upload";
+import makeStoredFilePath from "~/utils/make-stored-file-path";
 
 const fetchArticle = async (id: string) => {
-  const response = await supabase.from("articles").select().eq("id", id).single();
-  return response.data;
+  const { data } = await supabase.from("articles").select(`
+    id,
+    title,
+    content,
+    draft,
+    created_at,
+    updated_at,
+    banner_file_id(id, extension, description)
+  `.trim()).eq("id", id).single<{
+    id: number,
+    title: string,
+    content: string,
+    draft: boolean,
+    created_at: string,
+    updated_at: string,
+    banner_file_id: { id: number, extension: string, description: string } | null
+  }>();
+  
+  return data;
 }
 
 /**
@@ -35,6 +54,31 @@ export default function ArticleEditorView () {
     await refetch();
   }
 
+  const handleBannerUpload = async (): Promise<void> => {
+    const fileID = await createFileUploadToSupabase(`Bannière de l'article '${article()!.id}'`);
+    if (typeof fileID !== "number") return;
+
+    const { error } = await supabase.from("articles").update({
+      banner_file_id: fileID,
+      updated_at: "now()"
+    }).eq("id", article()!.id);
+
+    if (error) console.error(error);
+    else await refetch();
+  };
+
+  const handleBannerRemove = async (): Promise<void> => {
+    if (!article()?.banner_file_id) return;
+
+    const { error } = await supabase.from("articles").update({
+      banner_file_id: null,
+      updated_at: "now()"
+    }).eq("id", article()!.id);
+
+    if (error) console.error(error);
+    else await refetch();
+  };
+
   return (
     <ShowWhenAuthenticated>
       <a href="/articles">
@@ -55,6 +99,32 @@ export default function ArticleEditorView () {
               <p>
                 Dernière mise à jour: {article().updated_at}
               </p>
+
+              <button
+                type="button"
+                onClick={() => handleBannerUpload()}
+              >
+                Changer l'image de bannière
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleBannerRemove()}
+              >
+                Supprimer l'image de bannière
+              </button>
+
+              <Show when={article().banner_file_id}>
+                {banner => (
+                  <>
+                    <img
+                      src={supabase.storage.from("files").getPublicUrl(makeStoredFilePath(banner())).data.publicUrl}
+                      alt={banner().description}
+                    />
+                    <p>{banner().description}</p>
+                  </>
+                )}
+              </Show>
 
               <input type="text" value={article().content}
                 onInput={(event) => {

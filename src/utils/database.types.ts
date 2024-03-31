@@ -65,20 +65,20 @@ export type Database = {
       files: {
         Row: {
           description: string
+          extension: string
           id: number
-          mime: string
           uploaded_at: string
         }
         Insert: {
           description?: string
+          extension: string
           id?: number
-          mime?: string
           uploaded_at?: string
         }
         Update: {
           description?: string
+          extension?: string
           id?: number
-          mime?: string
           uploaded_at?: string
         }
         Relationships: []
