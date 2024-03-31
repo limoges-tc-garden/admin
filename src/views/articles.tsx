@@ -1,13 +1,12 @@
 import ShowWhenAuthenticated from "~/components/ShowWhenAuthenticated";
 
 /**
- * @route `/`
+ * @route `/articles`
  */
-export default function OverviewView () {
+export default function ArticlesView () {
   return (
     <ShowWhenAuthenticated>
-      <h1>Vue d'ensemble</h1>
-      <p>Vous êtes authentifié !</p>
+      <h1>Articles</h1>
     </ShowWhenAuthenticated>
   )
 };

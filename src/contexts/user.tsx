@@ -14,7 +14,7 @@ import {
   Show
 } from "solid-js";
 
-import UserContextLoader from "~/components/AuthLoader";
+import UserContextLoader from "~/components/UserContextLoader";
 
 const UserContext = createContext<Accessor<User | null>>(
   () => null

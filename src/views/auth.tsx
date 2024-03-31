@@ -1,9 +1,18 @@
 import { createSignal } from "solid-js";
-
 import { TextField } from "@kobalte/core";
+
 import ShowWhenNotAuthenticated from "~/components/ShowWhenNotAuthenticated";
 import supabase from "~/utils/supabase";
 
+/**
+ * Page d'authentification.
+ * 
+ * Toutes les autres routes sont protégées par l'authentification
+ * et redirigent automatiquement vers cette page si l'utilisateur
+ * n'est pas connecté.
+ * 
+ * @route `/auth`
+ */
 export default function AuthView () {
   const [email, setEmail] = createSignal("");
   const [password, setPassword] = createSignal("");

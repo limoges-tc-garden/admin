@@ -1,13 +1,13 @@
 import ShowWhenAuthenticated from "~/components/ShowWhenAuthenticated";
 
 /**
- * @route `/`
+ * Permet de visualiser et modifier les dirigeants du club.
+ * @route `/dirigeants`
  */
-export default function OverviewView () {
+export default function LeadersView () {
   return (
     <ShowWhenAuthenticated>
-      <h1>Vue d'ensemble</h1>
-      <p>Vous êtes authentifié !</p>
+      <h1>Dirigeants</h1>
     </ShowWhenAuthenticated>
   )
 };
