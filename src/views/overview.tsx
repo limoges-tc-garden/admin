@@ -11,6 +11,7 @@ export default function OverviewView () {
       <a href="/articles">Voir les articles</a>
       <a href="/tournois">Voir les tournois</a>
       <a href="/partenaires">Voir les partenaires</a>
+      <a href="/dirigeants">Voir les dirigeants</a>
     </ShowWhenAuthenticated>
   )
 };
