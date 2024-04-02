@@ -21,6 +21,7 @@ const PartnersView = lazy(() => import('~/views/partners'));
 const TournamentsView = lazy(() => import('~/views/tournaments/index'));
 const NewTournamentView = lazy(() => import('~/views/tournaments/new'));
 const TournamentEditorView = lazy(() => import('~/views/tournaments/editor'));
+const TeachersView = lazy(() => import('~/views/teachers'));
 const UserView = lazy(() => import('~/views/user'));
 
 render(() => (
@@ -41,6 +42,7 @@ render(() => (
       <Route path="/tournois" component={TournamentsView} />
       <Route path="/tournois/nouveau" component={NewTournamentView} />
       <Route path="/tournois/edition/:id" component={TournamentEditorView} />
+      <Route path="/enseignants" component={TeachersView} />
       <Route path="/utilisateur" component={UserView} />
 
       {/* On redirige vers `/` si jamais rien ne correspond. */}

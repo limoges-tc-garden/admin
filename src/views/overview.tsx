@@ -12,6 +12,9 @@ export default function OverviewView () {
       <a href="/tournois">Voir les tournois</a>
       <a href="/partenaires">Voir les partenaires</a>
       <a href="/dirigeants">Voir les dirigeants</a>
+      <a href="/enseignants">Voir les enseignants</a>
+
+      <a href="/utilisateur">Voir votre compte</a>
     </ShowWhenAuthenticated>
   )
 };
