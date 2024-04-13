@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@editorjs/editorjs": "^2.29.1",
     "@kobalte/core": "^0.12.6",
     "@solidjs/router": "^0.13.1",
     "@supabase/supabase-js": "^2.41.1",

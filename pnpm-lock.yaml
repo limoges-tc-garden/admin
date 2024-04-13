@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@editorjs/editorjs':
+    specifier: ^2.29.1
+    version: 2.29.1
   '@kobalte/core':
     specifier: ^0.12.6
     version: 0.12.6(solid-js@1.8.16)
@@ -383,6 +386,10 @@ packages:
       solid-js: ^1.8
     dependencies:
       solid-js: 1.8.16
+    dev: false
+
+  /@editorjs/editorjs@2.29.1:
+    resolution: {integrity: sha512-WRT2pCfikMsvySQJqpCU21LfTZaPuxUWsDO8aFGrPx4MKzOR9D+Ur4mNb3jq0FXx2EMqvIWfTyFixJxtjGHTyQ==}
     dev: false
 
   /@esbuild/aix-ppc64@0.20.2:
