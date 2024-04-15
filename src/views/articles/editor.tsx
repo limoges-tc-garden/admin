@@ -1,9 +1,10 @@
 import ShowWhenAuthenticated from "~/components/ShowWhenAuthenticated";
 import { Navigate, useParams } from "@solidjs/router";
-import { Show, createResource } from "solid-js";
+import { Show, createEffect, createResource, createSignal, on, onCleanup } from "solid-js";
 import supabase from "~/utils/supabase";
 import { createFileUploadToSupabase } from "~/utils/create-file-upload";
 import makeStoredFilePath from "~/utils/make-stored-file-path";
+import EditorJS, { type OutputData } from '@editorjs/editorjs';
 
 const fetchArticle = async (id: string) => {
   const { data } = await supabase.from("articles").select(`
@@ -17,7 +18,7 @@ const fetchArticle = async (id: string) => {
   `.trim()).eq("id", id).single<{
     id: number,
     title: string,
-    content: string,
+    content: OutputData | null,
     draft: boolean,
     created_at: string,
     updated_at: string,
@@ -36,13 +37,16 @@ export default function ArticleEditorView () {
   
   const [article, { mutate, refetch }] = createResource(() => params.id, fetchArticle);
   const mutateRemoteArticle = async () => {
+    const content = await editor?.save() ?? null;
+
     const articleInstance = article();
     if (!articleInstance) return;
 
     const { error } = await supabase.from("articles").update({
       draft: articleInstance.draft,
       title: articleInstance.title,
-      content: articleInstance.content,
+      // @ts-expect-error : pas le même type
+      content,
       updated_at: "now()" // On utilise la fonction PostgreSQL `now()` pour obtenir le timestamp actuel.
     }).eq("id", params.id);
 
@@ -78,6 +82,26 @@ export default function ArticleEditorView () {
     if (error) console.error(error);
     else await refetch();
   };
+
+  let editor: EditorJS | null = null;
+  const [editorElement, setEditorElement] = createSignal<HTMLDivElement | undefined>();
+  
+  createEffect(on(editorElement, (holder) => {
+    if (!holder) return;
+    editor = new EditorJS({
+      holder,
+      // On initialise le contenu de l'éditeur avec le contenu 
+      // actuel dans la base de données.
+      data: article()?.content ?? void 0
+    });
+
+    onCleanup(() => {
+      if (editor) {
+        editor.destroy();
+        editor = null;
+      }
+    });
+  }));
 
   return (
     <ShowWhenAuthenticated>
@@ -126,15 +150,6 @@ export default function ArticleEditorView () {
                 )}
               </Show>
 
-              <input type="text" value={article().content}
-                onInput={(event) => {
-                  mutate((prev) => prev ? ({
-                    ...prev,
-                    content: event.target.value
-                  }) : prev);
-                }}
-              />
-
               <input type="checkbox" checked={article().draft}
                 onChange={(event) => {
                   mutate((prev) => prev ? ({
@@ -150,6 +165,8 @@ export default function ArticleEditorView () {
               >
                 Enregistrer
               </button>
+
+              <div ref={setEditorElement} />
             </>
           )}
         </Show>

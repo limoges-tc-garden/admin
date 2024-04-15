@@ -12,7 +12,7 @@ export type Database = {
       articles: {
         Row: {
           banner_file_id: number | null
-          content: string
+          content: Json | null
           created_at: string
           draft: boolean
           id: number
@@ -21,7 +21,7 @@ export type Database = {
         }
         Insert: {
           banner_file_id?: number | null
-          content?: string
+          content?: Json | null
           created_at?: string
           draft?: boolean
           id?: number
@@ -30,7 +30,7 @@ export type Database = {
         }
         Update: {
           banner_file_id?: number | null
-          content?: string
+          content?: Json | null
           created_at?: string
           draft?: boolean
           id?: number
