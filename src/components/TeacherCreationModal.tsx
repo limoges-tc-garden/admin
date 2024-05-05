@@ -1,6 +1,7 @@
-import { type Component, createSignal, type Setter, batch } from "solid-js";
+import { type Component, createSignal, type Setter, batch, Show } from "solid-js";
 import { Dialog, TextField } from "@kobalte/core";
 import supabase from "~/utils/supabase";
+import { createFileUploadToSupabase } from "~/utils/create-file-upload";
 
 const TeacherCreationModal: Component<{
   open: boolean;
@@ -11,7 +12,8 @@ const TeacherCreationModal: Component<{
 }> = (props) => {
   const [firstName, setFirstName] = createSignal("");
   const [lastName, setLastName] = createSignal("");
-  
+  const [avatarID, setAvatarID] = createSignal<number | null>(null);
+
   const handleSubmit = async (event: SubmitEvent) => {
     event.preventDefault();
 
@@ -23,6 +25,7 @@ const TeacherCreationModal: Component<{
     }
 
     const { error } = await supabase.from("teachers").insert({
+      avatar_file_id: avatarID() ?? void 0,
       first_name: firstNameValue,
       last_name: lastNameValue,
     });
@@ -72,6 +75,18 @@ const TeacherCreationModal: Component<{
                 </TextField.Label>
                 <TextField.Input type="text" />
               </TextField.Root>
+
+              <Show when={avatarID() === null}>
+                <button type="button"
+                  onClick={async () => {
+                    const fileID = await createFileUploadToSupabase("Photo d'enseignant(e)");
+                    if (typeof fileID !== "number") return;
+                    setAvatarID(fileID);
+                  }}
+                >
+                  Ajouter une photo
+                </button>
+              </Show>
 
               <button type="submit">
                 Enregistrer

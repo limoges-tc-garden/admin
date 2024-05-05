@@ -1,6 +1,7 @@
-import { createSignal, type Component } from "solid-js";
+import { Show, createSignal, type Component } from "solid-js";
 import { TextField } from "@kobalte/core";
 import supabase from "~/utils/supabase";
+import { createFileUploadToSupabase } from "~/utils/create-file-upload";
 
 const PartnerCreationBox: Component<{
   /**
@@ -14,6 +15,7 @@ const PartnerCreationBox: Component<{
 }> = (props) => {
   const [name, setName] = createSignal("");
   const [url, setURL] = createSignal("");
+  const [logoID, setLogoID] = createSignal<number | null>(null);
 
   const handleSubmit = async (event: SubmitEvent) => {
     event.preventDefault();
@@ -24,8 +26,9 @@ const PartnerCreationBox: Component<{
 
     // On demande la création d'un nouveau partenaire.
     const { error } = await supabase.from("partners").insert({
+      logo_file_id: logoID() ?? void 0,
       name: nameValue,
-      url: url()
+      url: url(),
     });
 
     if (error) { // TODO: Montrer une erreur à l'utilisateur.
@@ -58,6 +61,18 @@ const PartnerCreationBox: Component<{
           </TextField.Label>
           <TextField.Input type="url" />
         </TextField.Root>
+
+        <Show when={logoID() === null}>
+          <button type="button"
+            onClick={async () => {
+              const fileID = await createFileUploadToSupabase("Photo de partenaire");
+              if (typeof fileID !== "number") return;
+              setLogoID(fileID);
+            }}
+          >
+            Ajouter une photo
+          </button>
+        </Show>
 
         <div class="flex">
           <button type="button" onClick={() => props.close()}>
