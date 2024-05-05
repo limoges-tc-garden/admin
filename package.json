@@ -10,16 +10,16 @@
   },
   "dependencies": {
     "@editorjs/editorjs": "^2.29.1",
-    "@kobalte/core": "^0.12.6",
-    "@solidjs/router": "^0.13.1",
-    "@supabase/supabase-js": "^2.41.1",
-    "@unocss/reset": "^0.58.8",
-    "solid-js": "^1.8.15"
+    "@kobalte/core": "^0.13.1",
+    "@solidjs/router": "^0.13.3",
+    "@supabase/supabase-js": "^2.43.1",
+    "@unocss/reset": "^0.59.4",
+    "solid-js": "^1.8.17"
   },
   "devDependencies": {
-    "typescript": "^5.2.2",
-    "unocss": "^0.58.8",
-    "vite": "^5.2.0",
+    "typescript": "^5.4.5",
+    "unocss": "^0.59.4",
+    "vite": "^5.2.11",
     "vite-plugin-solid": "^2.10.2"
   }
 }
