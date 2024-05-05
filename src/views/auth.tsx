@@ -36,21 +36,23 @@ export default function AuthView () {
   return (
     <ShowWhenNotAuthenticated>
       <main class="min-h-screen h-full flex justify-center items-center flex-col gap-4 bg-gray-1">
-        <h1 class="text-2xl font-medium pb-4">Administration LTCG</h1>
-        <form onSubmit={handleLogin} class="max-w-[500px] w-full flex flex-col items-end gap-4 border bg-white shadow-lg p-6 rounded-xl">
+        <h1 class="text-2xl font-medium pb-4">
+          Administration LTCG
+        </h1>
 
+        <form onSubmit={handleLogin} class="max-w-[500px] w-full flex flex-col items-end gap-4 border bg-white shadow-lg p-6 rounded-xl">
           <TextField.Root value={email()} onChange={setEmail} class="flex flex-col w-full">
             <TextField.Label>
               E-Mail
             </TextField.Label>
-            <TextField.Input type="email" class="bg-white border focus:border-orange outline-orange px-2 py-2 rounded-lg" />
+            <TextField.Input required type="email" class="bg-white border focus:border-orange outline-orange px-2 py-2 rounded-lg" />
           </TextField.Root>
 
           <TextField.Root value={password()} onChange={setPassword} class="flex flex-col w-full">
             <TextField.Label>
               Mot de passe
             </TextField.Label>
-            <TextField.Input type="password" class="bg-white border focus:border-orange outline-orange px-2 py-2 rounded-lg" />
+            <TextField.Input required type="password" class="bg-white border focus:border-orange outline-orange px-2 py-2 rounded-lg" />
           </TextField.Root>
 
           <button type="submit" class="bg-orange-8 text-white px-4 py-1.5 rounded-lg hover:(bg-orange text-white) transition">
