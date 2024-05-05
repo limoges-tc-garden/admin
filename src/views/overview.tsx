@@ -6,15 +6,10 @@ import ShowWhenAuthenticated from "~/components/ShowWhenAuthenticated";
 export default function OverviewView () {
   return (
     <ShowWhenAuthenticated>
-      <h1>Vue d'ensemble</h1>
+      <h1 class="text-2xl pt-6 text-center font-medium">
+        Bienvenue dans l'administration du club LTCG !
+      </h1>
 
-      <a href="/articles">Voir les articles</a>
-      <a href="/tournois">Voir les tournois</a>
-      <a href="/partenaires">Voir les partenaires</a>
-      <a href="/dirigeants">Voir les dirigeants</a>
-      <a href="/enseignants">Voir les enseignants</a>
-
-      <a href="/utilisateur">Voir votre compte</a>
     </ShowWhenAuthenticated>
   )
 };
