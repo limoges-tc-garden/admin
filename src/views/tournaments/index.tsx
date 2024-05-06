@@ -2,6 +2,7 @@ import ShowWhenAuthenticated from "~/components/ShowWhenAuthenticated";
 import supabase from "~/utils/supabase";
 
 import { createResource, For, Show } from "solid-js";
+import timestampToReadable from "~/utils/timestamp-to-readable";
 
 /**
  * Liste des tournois dans la base de données.
@@ -17,28 +18,30 @@ export default function TournamentsView () {
 
   return (
     <ShowWhenAuthenticated>
-      <h1>Tournois</h1>
+      <h1 class="text-center text-2xl font-medium">
+        Tournois
+      </h1>
 
-      <a href="/tournois/nouveau">
-        Créer un résultat de tournoi
-      </a>
+      <div class="flex items-center gap-4 justify-center py-6">
+        <a href="/tournois/nouveau" class="bg-orange text-white px-4 py-2 rounded-lg">
+          Créer un résultat de tournoi
+        </a>
 
-      <button
-        type="button"
-        onClick={() => refetch()}
-      >
-        Rafraîchir
-      </button>
+        <button
+          type="button"
+          onClick={() => refetch()}
+        >
+          Rafraîchir
+        </button>
+      </div>
 
-      <Show when={!tournaments.loading} fallback={<p>Chargement des tournois...</p>}>
-        <For each={tournaments()} fallback={<p>Aucun tournoi à afficher.</p>}>
+      <Show when={!tournaments.loading} fallback={<p class="text-center">Chargement des tournois...</p>}>
+        <For each={tournaments()} fallback={<p class="text-center">Aucun tournoi à afficher.</p>}>
           {tournament => (
-            <article>
-              <a href={`/tournois/edition/${tournament.id}`}>
-                <h2>{tournament.title}</h2>
-                <p>Crée le {tournament.created_at} et mis à jour le {tournament.updated_at}.</p>
-              </a>
-            </article>
+            <a href={`/tournois/edition/${tournament.id}`} class="hover:bg-gray-1 px-4 py-2 rounded-lg">
+              <h2 class="text-medium font-medium">{tournament.title}</h2>
+              <p>Crée le {timestampToReadable(tournament.created_at)} et mis à jour le {timestampToReadable(tournament.updated_at)}.</p>
+            </a>
           )}
         </For>
       </Show>

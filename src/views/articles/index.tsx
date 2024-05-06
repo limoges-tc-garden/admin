@@ -2,6 +2,7 @@ import ShowWhenAuthenticated from "~/components/ShowWhenAuthenticated";
 import supabase from "~/utils/supabase";
 
 import { createResource, For, Show } from "solid-js";
+import timestampToReadable from "~/utils/timestamp-to-readable";
 
 /**
  * Liste des articles dans la base de données.
@@ -17,30 +18,34 @@ export default function ArticlesView () {
 
   return (
     <ShowWhenAuthenticated>
-      <h1>Articles</h1>
+      <h1 class="text-center text-2xl font-medium">
+        Articles
+      </h1>
 
-      <a href="/articles/nouveau">
-        Créer un article
-      </a>
+      <div class="flex items-center gap-4 justify-center py-6">
+        <a href="/articles/nouveau" class="bg-orange text-white px-4 py-2 rounded-lg">
+          Créer un article
+        </a>
 
-      <button
-        type="button"
-        onClick={() => refetch()}
-      >
-        Rafraîchir
-      </button>
+        <button
+          type="button"
+          onClick={() => refetch()}
+        >
+          Rafraîchir
+        </button>
+      </div>
 
       <Show when={!articles.loading} fallback={<p>Chargement des articles...</p>}>
-        <For each={articles()} fallback={<p>Aucun article à afficher.</p>}>
-          {article => (
-            <article>
-              <a href={`/articles/edition/${article.id}`}>
-                <h2>{article.title}</h2>
-                <p>Crée le {article.created_at} et mis à jour le {article.updated_at}.</p>
+        <div class="flex flex-col gap-2">
+          <For each={articles()} fallback={<p>Aucun article à afficher.</p>}>
+            {article => (
+              <a href={`/articles/edition/${article.id}`} class="hover:bg-gray-1 px-4 py-2 rounded-lg">
+                <h2 class="text-medium font-medium">{article.title}</h2>
+                <p>Crée le {timestampToReadable(article.created_at)} et mis à jour le {timestampToReadable(article.updated_at)}.</p>
               </a>
-            </article>
-          )}
-        </For>
+            )}
+          </For>
+        </div>
       </Show>
     </ShowWhenAuthenticated>
   )
