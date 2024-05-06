@@ -5,6 +5,7 @@ import supabase from "~/utils/supabase";
 import { createFileUploadToSupabase } from "~/utils/create-file-upload";
 import makeStoredFilePath from "~/utils/make-stored-file-path";
 import EditorJS, { type OutputData } from '@editorjs/editorjs';
+import timestampToReadable from "~/utils/timestamp-to-readable";
 
 const fetchArticle = async (id: string) => {
   const { data } = await supabase.from("articles").select(`
@@ -105,68 +106,76 @@ export default function ArticleEditorView () {
 
   return (
     <ShowWhenAuthenticated>
-      <a href="/articles">
-        Revenir à la liste d'articles
-      </a>
-
       <Show when={!article.loading} fallback={<p>Chargement de l'article...</p>}>
         <Show when={article()} fallback={<Navigate href="/articles" />}>
           {article => (
             <>
-              <h1>
+              <h1 class="text-center text-2xl font-medium">
                 {article().title}
               </h1>
 
-              <p>
-                Crée le: {article().created_at}
-              </p>
-              <p>
-                Dernière mise à jour: {article().updated_at}
-              </p>
-
-              <button
-                type="button"
-                onClick={() => handleBannerUpload()}
-              >
-                Changer l'image de bannière
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleBannerRemove()}
-              >
-                Supprimer l'image de bannière
-              </button>
+              <div class="text-sm flex flex-col gap-1 text-center py-4">
+                <p>
+                  Crée le {timestampToReadable(article().created_at)}
+                </p>
+                <p>
+                  Dernière mise à jour le {timestampToReadable(article().updated_at)}
+                </p>
+              </div>
 
               <Show when={article().banner_file_id}>
                 {banner => (
-                  <>
-                    <img
-                      src={supabase.storage.from("files").getPublicUrl(makeStoredFilePath(banner())).data.publicUrl}
-                      alt={banner().description}
-                    />
-                    <p>{banner().description}</p>
-                  </>
+                  <img
+                    src={supabase.storage.from("files").getPublicUrl(makeStoredFilePath(banner())).data.publicUrl}
+                    alt={banner().description}
+                    class="max-h-[400px] mx-auto rounded-lg border"
+                  />
                 )}
               </Show>
 
-              <input type="checkbox" checked={article().draft}
-                onChange={(event) => {
-                  mutate((prev) => prev ? ({
-                    ...prev,
-                    draft: event.target.checked
-                  }) : prev);
-                }}
-              />
+              <div class="flex justify-center items-center gap-4 pt-6">
+                <button
+                  type="button"
+                  class="border border hover:bg-gray-1  transition rounded-lg px-4 py-2"
+                  onClick={() => handleBannerUpload()}
+                >
+                  {article().banner_file_id ? "Changer l'" : "Ajouter une "}image
+                </button>
 
-              <button
-                type="button"
-                onClick={mutateRemoteArticle}
-              >
-                Enregistrer
-              </button>
+                <Show when={article().banner_file_id}>
+                  <button
+                    type="button"
+                    class="border border-red hover:bg-red-1 transition rounded-lg px-4 py-2"
+                    onClick={() => handleBannerRemove()}
+                  >
+                    Supprimer l'image
+                  </button>
+                </Show>
+              </div>
 
-              <div ref={setEditorElement} />
+              <div class="border rounded-lg p-2 my-4" ref={setEditorElement} />
+              
+              <div class="mt-6 mb-12 flex gap-6 items-center justify-right">
+                <label class="flex gap-2">
+                  <input type="checkbox" checked={article().draft}
+                    onChange={(event) => {
+                      mutate((prev) => prev ? ({
+                        ...prev,
+                        draft: event.target.checked
+                      }) : prev);
+                    }}
+                  />
+                  <p>Brouillon</p>
+                </label>
+
+                <button
+                  type="button"
+                  class="bg-orange-5 text-white px-4 py-1.5 rounded-lg hover:(bg-orange text-white) transition "
+                  onClick={mutateRemoteArticle}
+                >
+                  Enregistrer
+                </button>
+              </div>
             </>
           )}
         </Show>

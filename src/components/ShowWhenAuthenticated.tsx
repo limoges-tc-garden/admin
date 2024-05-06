@@ -12,7 +12,7 @@ const ShowWhenAuthenticated: FlowComponent = (props) => {
   return (
     <Show when={user()} fallback={<Navigate href="/auth" />}>
       <NavBar />
-      <main class="max-w-[1000px] mx-auto px-6">
+      <main class="max-w-[1000px] mx-auto px-6 pt-8">
         {props.children}
       </main>
     </Show>
