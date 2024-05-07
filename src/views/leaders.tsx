@@ -26,27 +26,32 @@ export default function LeadersView () {
         refetch={async () => void refetch()}
       />
 
-      <h1>Dirigeants</h1>
+      <h1 class="text-center text-2xl font-medium">
+        Dirigeants
+      </h1>
 
-      <button
-        type="button"
-        onClick={() => refetch()}
-      >
-        Rafraîchir
-      </button>
+      <div class="flex items-center gap-4 justify-center py-6">
+        <button
+          type="button"
+          class="bg-orange text-white px-4 py-2 rounded-lg"
+          onClick={() => setCreationOpened(true)}
+        >
+          Ajouter
+        </button>
 
-      <button
-        type="button"
-        onClick={() => setCreationOpened(true)}
-      >
-        Ajouter
-      </button>
+        <button
+          type="button"
+          onClick={() => refetch()}
+        >
+          Rafraîchir
+        </button>
+      </div>
 
       <Show when={leaders.loading}>
         <p>Chargement des dirigeants...</p>
       </Show>
 
-      <div>
+      <div class="flex flex-col gap-4 mb-8">
         <Suspense>
           <For each={leaders()} fallback={<p>Aucun dirigeant à afficher.</p>}>
             {leader => (

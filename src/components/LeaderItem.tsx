@@ -63,9 +63,7 @@ const LeaderItem: Component<{
 
   return (
     <div class="flex">
-      <Show when={props.leader.direction}>
-        <p>(direction)</p>
-      </Show>
+      
       <div class="flex flex-col">
         <Show when={!editing()} fallback={
           <div>
@@ -86,7 +84,12 @@ const LeaderItem: Component<{
             />
           </div>
         }>
-          <h2>{props.leader.first_name} {props.leader.last_name}</h2>
+          <div class="flex items-center gap-1">
+            <Show when={props.leader.direction}>
+              <p>(direction)</p>
+            </Show>
+            <h2>{props.leader.first_name} {props.leader.last_name}</h2>
+          </div>
           <p>{props.leader.headline}</p>
         </Show>
       </div>
