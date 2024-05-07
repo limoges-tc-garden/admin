@@ -36,20 +36,22 @@ export default function NewArticleView () {
   
   return (
     <ShowWhenAuthenticated>
-      <h1>Nouvel article</h1>
-      <p>
+      <h1 class="text-center text-2xl font-medium">
+        Nouvel article
+      </h1>
+      <p class="text-center">
         Choisissez un titre pour votre nouveau merveilleux article.
       </p>
 
       <form onSubmit={handleSubmit}>
-        <TextField.Root value={title()} onChange={setTitle}>
+        <TextField.Root value={title()} onChange={setTitle} class="flex flex-col gap-1">
           <TextField.Label>
             Titre
           </TextField.Label>
-          <TextField.Input type="text" />
+          <TextField.Input class="border border-orange rounded-lg px-3 py-1" type="text" />
         </TextField.Root>
 
-        <button type="submit">
+        <button type="submit" class="bg-orange rounded-lg mx-auto px-4 py-2 text-white mt-6 w-full">
           Créer
         </button>
       </form>
