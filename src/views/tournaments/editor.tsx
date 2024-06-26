@@ -4,10 +4,11 @@ import { Show, createEffect, createResource, createSignal, on, onCleanup } from 
 import supabase from "~/utils/supabase";
 import { createFileUploadToSupabase } from "~/utils/create-file-upload";
 import makeStoredFilePath from "~/utils/make-stored-file-path";
-import EditorJS, { type OutputData } from "@editorjs/editorjs";
+import EditorJS from "@editorjs/editorjs";
 import timestampToReadable from "~/utils/timestamp-to-readable";
+import type { Tournament } from "~/types/Tournament";
 
-const fetchTournament = async (id: string) => {
+const fetchTournament = async (id: string): Promise<Tournament | null> => {
   const { data } = await supabase.from("tournaments").select(`
     id,
     title,
@@ -16,15 +17,7 @@ const fetchTournament = async (id: string) => {
     created_at,
     updated_at,
     banner_file_id(id, extension, description)
-  `.trim()).eq("id", id).single<{
-    id: number,
-    title: string,
-    content: OutputData | null,
-    draft: boolean,
-    created_at: string,
-    updated_at: string,
-    banner_file_id: { id: number, extension: string, description: string } | null
-  }>();
+  `.trim()).eq("id", id).single<Tournament>();
   
   return data;
 }
@@ -46,7 +39,6 @@ export default function TournamentEditorView () {
     const { error } = await supabase.from("tournaments").update({
       draft: tournamentInstance.draft,
       title: tournamentInstance.title,
-      // @ts-expect-error : pas le même type
       content,
       updated_at: "now()" // On utilise la fonction PostgreSQL `now()` pour obtenir le timestamp actuel.
     }).eq("id", params.id);
