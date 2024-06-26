@@ -52,45 +52,50 @@ const TeacherCreationModal: Component<{
         <Dialog.Overlay class="fixed inset-0 z-50 bg-black/20" />
         <div class="fixed inset-0 z-50 flex items-center justify-center">
           <Dialog.Content class="z-50 bg-white p-4 shadow-md">
-            <div class="flex">
+            <div class="flex justify-between">
               <Dialog.Title class="">
                 Ajouter un(e) enseignant(e)
               </Dialog.Title>
               <Dialog.CloseButton class="">
-                Fermer!
+                Fermer
               </Dialog.CloseButton>
             </div>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} class="pt-4 flex flex-col gap-2">
               <TextField.Root value={firstName()} onChange={setFirstName}>
                 <TextField.Label>
                   Prénom
                 </TextField.Label>
-                <TextField.Input type="text" />
+                <TextField.Input type="text" class="w-full border rounded" />
               </TextField.Root>
 
               <TextField.Root value={lastName()} onChange={(value) => setLastName(value.toUpperCase())}>
                 <TextField.Label>
                   NOM
                 </TextField.Label>
-                <TextField.Input type="text" />
+                <TextField.Input type="text" class="w-full border rounded" />
               </TextField.Root>
 
-              <Show when={avatarID() === null}>
-                <button type="button"
-                  onClick={async () => {
-                    const fileID = await createFileUploadToSupabase("Photo d'enseignant(e)");
-                    if (typeof fileID !== "number") return;
-                    setAvatarID(fileID);
-                  }}
-                >
-                  Ajouter une photo
-                </button>
-              </Show>
+              <div class="flex flex-col gap-4 pt-6">
+                <Show when={avatarID() === null}>
+                  <button type="button"
+                    class="border border-orange text-orange px-4 py-2 rounded-lg"
+                    onClick={async () => {
+                      const fileID = await createFileUploadToSupabase("Photo d'enseignant(e)");
+                      if (typeof fileID !== "number") return;
+                      setAvatarID(fileID);
+                    }}
+                  >
+                    Ajouter une photo
+                  </button>
+                </Show>
 
-              <button type="submit">
-                Enregistrer
-              </button>
+                <button type="submit"
+                  class="bg-orange text-white px-4 py-2 rounded-lg"
+                >
+                  Enregistrer
+                </button>
+              </div>
             </form>
           </Dialog.Content>
         </div>

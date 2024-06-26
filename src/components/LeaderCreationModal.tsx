@@ -56,38 +56,38 @@ const LeaderCreationModal: Component<{
         <Dialog.Overlay class="fixed inset-0 z-50 bg-black/20" />
         <div class="fixed inset-0 z-50 flex items-center justify-center">
           <Dialog.Content class="z-50 bg-white p-4 shadow-md">
-            <div class="flex">
+            <div class="flex justify-between">
               <Dialog.Title class="">
                 Ajouter un dirigeant
               </Dialog.Title>
               <Dialog.CloseButton class="">
-                Fermer!
+                Fermer
               </Dialog.CloseButton>
             </div>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} class="pt-4 flex flex-col gap-2">
               <TextField.Root value={firstName()} onChange={setFirstName}>
                 <TextField.Label>
                   Prénom
                 </TextField.Label>
-                <TextField.Input type="text" />
+                <TextField.Input type="text" class="w-full border rounded" />
               </TextField.Root>
 
               <TextField.Root value={lastName()} onChange={(value) => setLastName(value.toUpperCase())}>
                 <TextField.Label>
                   NOM
                 </TextField.Label>
-                <TextField.Input type="text" />
+                <TextField.Input type="text" class="w-full border rounded" />
               </TextField.Root>
 
               <TextField.Root value={headline()} onChange={setHeadline}>
                 <TextField.Label>
                   Intitulé
                 </TextField.Label>
-                <TextField.Input type="text" />
+                <TextField.Input type="text" class="w-full border rounded" />
               </TextField.Root>
 
-              <label>
+              <label class="flex items-center gap-2 mt-4">
                 <input type="checkbox"
                   checked={direction()}
                   onChange={(e) => setDirection(e.currentTarget.checked)}
@@ -95,7 +95,9 @@ const LeaderCreationModal: Component<{
                 Fait partie de la direction ?
               </label>
 
-              <button type="submit">
+              <button type="submit"
+                class="mt-6 bg-orange text-white px-4 py-2 rounded-lg"
+              >
                 Enregistrer
               </button>
             </form>
