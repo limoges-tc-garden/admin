@@ -1,8 +1,9 @@
-import type { Database } from "~/utils/database.types"
 import { Show, type Component, createSignal, batch } from "solid-js";
 import supabase from "~/utils/supabase";
+import { createFileUploadToSupabase } from "~/utils/create-file-upload";
+import makeStoredFilePath from "~/utils/make-stored-file-path";
+import type { Teacher } from "~/types/Teacher";
 
-type Teacher = Database["public"]["Tables"]["teachers"]["Row"];
 const TeacherItem: Component<{
   teacher: Teacher
   refetch: () => Promise<void>;
@@ -56,26 +57,52 @@ const TeacherItem: Component<{
     }
   };
 
+  const handleAvatarUpload = async (): Promise<void> => {
+    const fileID = await createFileUploadToSupabase(`Photo de profile pour enseignant(e)`);
+    if (typeof fileID !== "number") return;
+
+    const { error } = await supabase.from("teachers").update({
+      avatar_file_id: fileID,
+    }).eq("id", props.teacher.id);
+
+    if (error) console.error(error);
+    else await props.refetch();
+  };
+
   return (
-    <div class="flex">
-      <div class="flex flex-col">
-        <Show when={!editing()} fallback={
-          <div>
-            <input
-              type="text"
-              value={editedFirstName()}
-              onInput={e => setEditedFirstName(e.currentTarget.value)}
-            />
-            <input
-              type="text"
-              value={editedLastName()}
-              onInput={e => setEditedLastName(e.currentTarget.value)}
-            />
-          </div>
-        }>
-          <h2>{props.teacher.first_name} {props.teacher.last_name}</h2>
-        </Show>
-      </div>
+    <div class="flex items-center gap-4">
+      <Show when={props.teacher.avatar_file_id}>
+        {banner => (
+          <img
+            src={supabase.storage.from("files").getPublicUrl(makeStoredFilePath(banner())).data.publicUrl}
+            alt={`Photo de profile de ${props.teacher.first_name} ${props.teacher.last_name}`}
+            class="w-14 h-14 rounded-full object-cover flex-shrink-0"
+          />
+        )}
+      </Show>
+
+      <Show when={!editing()} fallback={
+        <div class="flex w-full">
+          <input
+            type="text"
+            value={editedFirstName()}
+            onInput={e => setEditedFirstName(e.currentTarget.value)}
+          />
+          <input
+            type="text"
+            value={editedLastName()}
+            onInput={e => setEditedLastName(e.currentTarget.value)}
+          />
+
+          <button type="button" class="ml-auto"
+            onClick={handleAvatarUpload}
+          >
+            Modifier la photo
+          </button>
+        </div>
+      }>
+        <h2>{props.teacher.first_name} {props.teacher.last_name}</h2>
+      </Show>
 
       <div class="ml-auto flex gap-4">
         <Show when={!editing()}

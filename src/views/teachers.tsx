@@ -1,4 +1,5 @@
 import { For, Show, Suspense, createResource, createSignal } from "solid-js";
+import type { Teacher } from "~/types/Teacher";
 
 import ShowWhenAuthenticated from "~/components/ShowWhenAuthenticated";
 import TeacherCreationModal from "~/components/TeacherCreationModal";
@@ -6,9 +7,9 @@ import TeacherItem from "~/components/TeacherItem";
 
 import supabase from "~/utils/supabase";
 
-const fetchTeachers = async () => {
-  const response = await supabase.from("teachers").select("*");
-  return response.data;
+const fetchTeachers = async (): Promise<Teacher[] | null> => {
+  const response = await supabase.from("teachers").select("*, avatar_file_id(*)");
+  return response.data as Teacher[] | null;
 }
 
 /**
@@ -47,7 +48,6 @@ export default function TeachersView () {
           Rafraîchir
         </button>
       </div>
-
 
       <Show when={teachers.loading}>
         <p>Chargement des enseignant(e)s...</p>
